@@ -10,7 +10,7 @@ This repository contains data and analysis for the study "Predicting hospital ad
 
     eGFR.ipynb -- A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in the dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation (2021). Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values. These calculated values and CKD stages are then added as new columns to the dataset. Additionally, the notebook provides a summary of statistical results derived from the newly added information.
 
-<!-- How to Use -->
+# How to Use
 
     To work with the RData file, you will need R statistical software installed on your machine. You can load the dataset into your R environment using the load() function.
 

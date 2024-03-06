@@ -40,7 +40,7 @@ To execute the analysis in the Jupyter Notebook, it is necessary to have Jupyter
 
 [3] https://www.nhs.uk/conditions/kidney-disease/diagnosis/
 
-# Supplementary References
+# Supplementary Resources
 
 [4] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271619#abstract0
 

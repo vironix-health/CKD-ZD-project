@@ -1,20 +1,54 @@
 # Chronic Kidney Disease ML Project
 
-This repository contains data and analysis for the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al [1]. The study utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features, including demographic information, emergency department triage variables, and medical history.
+This is a repository containing data and analysis for the freely available MIMIC-IV database, and the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
+
+MIMIC-IV [4] (Medical Information Mart for Intensive Care, Version IV) is an extensive database comprising de-identified health-related data associated with over 180,000 thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center in Boston, Massachusetts. It is an update and expansion of the earlier MIMIC-III database and includes data such as vital signs, medications, laboratory measurements, observations and notes taken by care providers, fluid balance, procedure codes, diagnostic codes, imaging reports, hospital length of stay, survival data, and more.
+
+The study published by Hong et al. [1] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history.
 
 # Repository Contents
 
-    5v_cleandf.RData
+The functionality of the repository contents can be described in three distinct subdivisions: preprocessing the MIMIC-IV dataset, preprocessing the Hong et al. dataset, and feature analysis of a merged set combining data from both sources.
+
+## MIMIC-IV
+
+    /mimic_iv_extract
+
+        asd
+
+        sad
+
+This is a subdirectory containing .pkl and .xlsx data extracts from the MIMIC-IV database.
+
+    mimic_iv_extract.ipynb
+
+A Jupyter Notebook that first establishes a connection to the MIMIC-IV database via BigQuery, and subsequently extracts a series of relevant dataframes. The datasets are saved as pickle files in the /mimic_ic_extracts subdirectory. Each extracted dataframe is comprehensively detailed within the notebook, and in the README.md under the /mimic_iv_extract subdirectory section.
+
+    mimic_iv_ovrvw.ipynb
+
+A Jupyter Notebook providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database, leveraging data from the df_all_patients.pkl and df_icd_codes_with_description.pkl pickle files. The disease and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file, mimic_iv_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
+
+    mimic_iv_ckd_ovrvw.ipynb
+
+A Jupyter Notebook providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database, using the df_icd_codes_with_description.pkl pickle file. The patient and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file,  mimic_iv_ckd_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
+
+## "Predicting hospital admission at emergency department triage using machine learning" Hong et al.
+
+    /hong_et_al
+
+        5v_cleandf.RData
 
 This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
 
-    df.csv
+        df.csv
 
 This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the integrity of the original data, including the entirety of the original set.
 
-    df_updt.csv
+        df_updt.csv
 
 This is and updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
+
+This above subdirectory /hong_et_al contains .Rdata and .csv data extracts from the dataset used in the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
 
     eGFR.ipynb
 
@@ -28,9 +62,13 @@ A Jupyter Notebook that details the process of identifying the features most rel
 
 To work with the RData file, it is necessary to have R statistical software installed on your machine. The dataset can then be loaded into your R environment using the load() function.
 
-The CSV file can be viewed and manipulated using standard data processing tools such as Microsoft Excel, Python (pandas library), or R.
+The CSV and Excel files can be viewed and manipulated using standard data processing tools such as Microsoft Excel, Python (pandas library), or R.
 
-To execute the analysis in the Jupyter Notebook, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas and numpy). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and both the eGFR.ipynb and featuresID.ipynb scripts executed.
+To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts executed.
+
+# Contributors
+
+Vaibhav Mahajan, (St Catherine's College, University of Oxford)
 
 # References
 
@@ -40,8 +78,10 @@ To execute the analysis in the Jupyter Notebook, it is necessary to have Jupyter
 
 [3] https://www.nhs.uk/conditions/kidney-disease/diagnosis/
 
+[4] https://physionet.org/content/mimiciv/2.2/
+ 
 # Supplementary Resources
 
-[4] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271619#abstract0
+[5] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271619#abstract0
 
-[5] https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0295234#sec003
+[6] https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0295234#sec003

@@ -12,46 +12,6 @@ The functionality of the repository contents can be described in three distinct 
 
 ## MIMIC-IV
 
-    /mimic_iv_extract
-
-        mimic_iv_ovrvw.xlsx :
-
-            An excel file providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database. It specifically focuses on CKD comorbidities including hypertension, anemia, diabetes, cardiac disarrhythmias, ischemic heart disease, thyroid disease, heart failure, cerebrovascular disease, and PVD.
-
-        ckd_stage_frequency.xlsx :
-
-            An excel file providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database. There are a total of seven ICD-9 codes extracted corresponding to the five progressive stages of CKD, end stage renal disease, and unspecified stage CKD.
-
-        df_all_patients.pkl :
-
-            A pickle file containing a Pandas dataframe of all patients in the MIMIC-IV database, and basic identifiers including gender anchor information.
-
-        df_admissions.pkl :
-
-            A pickle file containing a Pandas dataframe of all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database. Admission timeframes, associated locations, insurance details, and some further demographics such as race and marital status are included.
-
-        df_past_medical_history.pkl :
-
-            A pickle file containing a Pandas dataframe of patient past medical history including previous diagnoses and notes by healthcare providers, as well as associated chart times for the records.
-
-        df_icd_codes_with_description.pkl :
-
-            A pickle file containing a Pandas dataframe of the ICD-9 codes and long-title diagnoses associated with all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database.
-
-        df_lab_items.pkl :
-
-            A pickle file containing a Pandas dataframe of all lab items recorded in the MIMIC-IV database, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
-
-        df_ckd_lab_items.pkl :
-
-            A pickle file containing a Pandas dataframe of lab items recorded in the MIMIC-IV database which are specifically related to CKD, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
-
-        df_height_weight.pkl :
-
-            A pickle file containing a Pandas dataframe with first, minimum, maximum, and mean measurements for patient height and weight associated with unique hospital admissions in the MIMIC-IV database.
-
-The above subdirectory /mimic_iv_extract contains .pkl and .xlsx data extracts from the MIMIC-IV database.
-
     mimic_iv_extract.ipynb
 
 A Jupyter Notebook that first establishes a connection to the MIMIC-IV database via BigQuery, and subsequently extracts a series of relevant dataframes. The datasets are saved as pickle files in the /mimic_ic_extracts subdirectory. Each extracted dataframe is comprehensively detailed within the notebook, and in the README.md under the /mimic_iv_extract subdirectory section.
@@ -63,6 +23,44 @@ A Jupyter Notebook providing an overview of the disease and hospitalisation freq
     mimic_iv_ckd_ovrvw.ipynb
 
 A Jupyter Notebook providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database, using the df_icd_codes_with_description.pkl pickle file. The patient and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file,  mimic_iv_ckd_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
+
+### Subdirectory /mimic_iv_extract
+
+    mimic_iv_ovrvw.xlsx :
+
+        An excel file providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database. It specifically focuses on CKD comorbidities including hypertension, anemia, diabetes, cardiac disarrhythmias, ischemic heart disease, thyroid disease, heart failure, cerebrovascular disease, and PVD.
+
+    ckd_stage_frequency.xlsx :
+
+        An excel file providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database. There are a total of seven ICD-9 codes extracted corresponding to the five progressive stages of CKD, end stage renal disease, and unspecified stage CKD.
+
+    df_all_patients.pkl :
+
+        A pickle file containing a Pandas dataframe of all patients in the MIMIC-IV database, and basic identifiers including gender anchor information.
+
+    df_admissions.pkl :
+
+        A pickle file containing a Pandas dataframe of all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database. Admission timeframes, associated locations, insurance details, and some further demographics such as race and marital status are included.
+
+    df_past_medical_history.pkl :
+
+        A pickle file containing a Pandas dataframe of patient past medical history including previous diagnoses and notes by healthcare providers, as well as associated chart times for the records.
+
+    df_icd_codes_with_description.pkl :
+
+        A pickle file containing a Pandas dataframe of the ICD-9 codes and long-title diagnoses associated with all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database.
+
+    df_lab_items.pkl :
+
+        A pickle file containing a Pandas dataframe of all lab items recorded in the MIMIC-IV database, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
+
+    df_ckd_lab_items.pkl :
+
+        A pickle file containing a Pandas dataframe of lab items recorded in the MIMIC-IV database which are specifically related to CKD, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
+
+    df_height_weight.pkl :
+
+        A pickle file containing a Pandas dataframe with first, minimum, maximum, and mean measurements for patient height and weight associated with unique hospital admissions in the MIMIC-IV database.
 
 ## "Predicting hospital admission at emergency department triage using machine learning" Hong et al.
 

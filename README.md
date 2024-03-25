@@ -4,7 +4,9 @@ This is a repository containing data and analysis for the freely available MIMIC
 
 MIMIC-IV [4] (Medical Information Mart for Intensive Care, Version IV) is an extensive database comprising de-identified health-related data associated with over 180,000 thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center in Boston, Massachusetts. It is an update and expansion of the earlier MIMIC-III database and includes data such as vital signs, medications, laboratory measurements, observations and notes taken by care providers, fluid balance, procedure codes, diagnostic codes, imaging reports, hospital length of stay, survival data, and more.
 
-The study published by Hong et al. [1] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history.
+The study published by Hong et al. [1] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history. In contrast to MIMIC-IV, this dataset is weighted more towards emergency department triage features prior to hospital admission.
+
+Merging the two sources creates a comprehensive dataset that spans from the initial ED triage all the way through to ICU and/or hospital admission and discharge, capturing a wholesome range of features.
 
 # Repository Contents
 
@@ -64,7 +66,7 @@ A Jupyter Notebook providing an overview of the patient and hospitalisation freq
 
 The above subdirectory /mimic_iv_extract contains .pkl and .xlsx data extracts from the MIMIC-IV database.
 
-## "Predicting hospital admission at emergency department triage using machine learning" Hong et al.
+## Hong et al.
 
     eGFR.ipynb
 

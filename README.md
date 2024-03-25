@@ -14,11 +14,43 @@ The functionality of the repository contents can be described in three distinct 
 
     /mimic_iv_extract
 
-        asd
+        mimic_iv_ovrvw.xlsx :
 
-        sad
+            An excel file providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database. It specifically focuses on CKD comorbidities including hypertension, anemia, diabetes, cardiac disarrhythmias, ischemic heart disease, thyroid disease, heart failure, cerebrovascular disease, and PVD.
 
-This is a subdirectory containing .pkl and .xlsx data extracts from the MIMIC-IV database.
+        ckd_stage_frequency.xlsx :
+
+            An excel file providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database. There are a total of seven ICD-9 codes extracted corresponding to the five progressive stages of CKD, end stage renal disease, and unspecified stage CKD.
+
+        df_all_patients.pkl :
+
+            A pickle file containing a Pandas dataframe of all patients in the MIMIC-IV database, and basic identifiers including gender anchor information.
+
+        df_admissions.pkl :
+
+            A pickle file containing a Pandas dataframe of all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database. Admission timeframes, associated locations, insurance details, and some further demographics such as race and marital status are included.
+
+        df_past_medical_history.pkl :
+
+            A pickle file containing a Pandas dataframe of patient past medical history including previous diagnoses and notes by healthcare providers, as well as associated chart times for the records.
+
+        df_icd_codes_with_description.pkl :
+
+            A pickle file containing a Pandas dataframe of the ICD-9 codes and long-title diagnoses associated with all admissions to the Beth Israel Deaconess Medical Center recorded in the MIMIC-IV database.
+
+        df_lab_items.pkl :
+
+            A pickle file containing a Pandas dataframe of all lab items recorded in the MIMIC-IV database, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
+
+        df_ckd_lab_items.pkl :
+
+            A pickle file containing a Pandas dataframe of lab items recorded in the MIMIC-IV database which are specifically related to CKD, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
+
+        df_height_weight.pkl :
+
+            A pickle file containing a Pandas dataframe with first, minimum, maximum, and mean measurements for patient height and weight associated with unique hospital admissions in the MIMIC-IV database.
+
+The above subdirectory /mimic_iv_extract contains .pkl and .xlsx data extracts from the MIMIC-IV database.
 
     mimic_iv_extract.ipynb
 
@@ -36,19 +68,19 @@ A Jupyter Notebook providing an overview of the patient and hospitalisation freq
 
     /hong_et_al
 
-        5v_cleandf.RData
+        5v_cleandf.RData : 
 
-This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
+            This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
 
-        df.csv
+        df.csv : 
 
-This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the integrity of the original data, including the entirety of the original set.
+            This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the integrity of the original data, including the entirety of the original set.
 
-        df_updt.csv
+        df_updt.csv : 
 
-This is and updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
+            This is an updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
 
-This above subdirectory /hong_et_al contains .Rdata and .csv data extracts from the dataset used in the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
+The above subdirectory /hong_et_al contains .Rdata and .csv data extracts from the dataset used in the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
 
     eGFR.ipynb
 
@@ -64,7 +96,7 @@ To work with the RData file, it is necessary to have R statistical software inst
 
 The CSV and Excel files can be viewed and manipulated using standard data processing tools such as Microsoft Excel, Python (pandas library), or R.
 
-To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts executed.
+To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts can be executed.
 
 # Contributors
 

@@ -8,7 +8,7 @@ The study published by Hong et al. [1] utilizes extensive patient data and ML mo
 
 # Repository Contents
 
-The functionality of the repository contents can be described in three distinct subdivisions: preprocessing the MIMIC-IV dataset, preprocessing the Hong et al. dataset, and feature analysis of a merged set combining data from both sources.
+The functionality of the repository contents can be described in three distinct subdivisions: preprocessing the MIMIC-IV dataset, preprocessing the Hong et al. dataset, and a subsequent feature analysis of a merged data set combining both sources.
 
 ## MIMIC-IV
 

@@ -62,23 +62,9 @@ A Jupyter Notebook providing an overview of the patient and hospitalisation freq
 
         A pickle file containing a Pandas dataframe with first, minimum, maximum, and mean measurements for patient height and weight associated with unique hospital admissions in the MIMIC-IV database.
 
+The above subdirectory /mimic_iv_extract contains .pkl and .xlsx data extracts from the MIMIC-IV database.
+
 ## "Predicting hospital admission at emergency department triage using machine learning" Hong et al.
-
-    /hong_et_al
-
-        5v_cleandf.RData : 
-
-            This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
-
-        df.csv : 
-
-            This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the integrity of the original data, including the entirety of the original set.
-
-        df_updt.csv : 
-
-            This is an updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
-
-The above subdirectory /hong_et_al contains .Rdata and .csv data extracts from the dataset used in the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
 
     eGFR.ipynb
 
@@ -87,6 +73,22 @@ A Jupyter Notebook that details the process of calculating the Estimated Glomeru
     featuresID.ipynb
 
 A Jupyter Notebook that details the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
+
+### Subdirectory /hong_et_al
+
+    5v_cleandf.RData : 
+
+        This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
+
+    df.csv : 
+
+        This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the integrity of the original data, including the entirety of the original set.
+
+    df_updt.csv : 
+
+        This is an updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
+
+The above subdirectory /hong_et_al contains .Rdata and .csv data extracts from the dataset used in the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
 
 # How to Use
 

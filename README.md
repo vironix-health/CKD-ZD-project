@@ -1,16 +1,14 @@
 # Chronic Kidney Disease ML Project
 
-This is a repository containing data and analysis for the freely available MIMIC-IV database, and the study "Predicting hospital admission at emergency department triage using machine learning" by Hong et al.
+This is a repository containing analysis for the freely available MIMIC-IV database, as well as two supplementary datasets from the studies "Predicting hospital admission at emergency department triage using machine learning" by Hong et al and "Data from: Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" by Iimori et al.
 
 MIMIC-IV [4] (Medical Information Mart for Intensive Care, Version IV) is an extensive database comprising de-identified health-related data associated with over 180,000 thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center in Boston, Massachusetts. It is an update and expansion of the earlier MIMIC-III database and includes data such as vital signs, medications, laboratory measurements, observations and notes taken by care providers, fluid balance, procedure codes, diagnostic codes, imaging reports, hospital length of stay, survival data, and more.
 
 The study published by Hong et al. [1] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history. In contrast to MIMIC-IV, this dataset is weighted more towards emergency department triage features prior to hospital admission.
 
-Merging the two sources creates a comprehensive dataset that spans from the initial ED triage all the way through to ICU and/or hospital admission and discharge, capturing a wholesome range of features.
+The study "Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" pusblished by Iimori et al. explores the outcomes of chronic kidney disease (CKD) in patients who have normal-range proteinuria. It involved a prospective cohort study of 1138 CKD patients, analyzing their risk of CKD progression, cardiovascular events, and mortality.
 
 # Repository Contents
-
-The functionality of the repository contents can be described in three distinct subdivisions: preprocessing the MIMIC-IV dataset, preprocessing the Hong et al. dataset, and a subsequent feature analysis of a merged data set combining both sources.
 
 ## MIMIC-IV
 
@@ -20,7 +18,7 @@ A Jupyter Notebook that first establishes a connection to the MIMIC-IV database 
 
     mimic_iv_ovrvw.ipynb
 
-A Jupyter Notebook providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database, leveraging data from the df_all_patients.pkl and df_icd_codes_with_description.pkl pickle files. The disease and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file, mimic_iv_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
+A Jupyter Notebook providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database, leveraging data from the df_all_patients.pkl and df_icd_codes_with_description.pkl pickle files. The disease, labe event, and hospitalisation frequency information is summarized in Pandas dataframes, and saved as external Excel files in the /mimic_ic_extracts subdirectory.
 
     mimic_iv_ckd_ovrvw.ipynb
 
@@ -66,14 +64,6 @@ A pickle file containing a Pandas dataframe with first, minimum, maximum, and me
 
 ## Hong et al.
 
-    eGFR.ipynb
-
-A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in the dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [2]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [3]. These calculated values and CKD stages are then added as new columns to the dataset. Additionally, the notebook provides a summary of statistical results derived from the newly added information.
-
-    featuresID.ipynb
-
-A Jupyter Notebook that details the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
-
 ### Subdirectory /hong_et_al
 
     5v_cleandf.RData
@@ -87,6 +77,16 @@ This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the int
     df_updt.csv
 
 This is an updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
+
+## Data Analysis
+
+    eGFR.ipynb
+
+A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [2]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [3]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
+
+    XG_boost.ipynb
+
+A Jupyter Notebook that details the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
 
 # How to Use
 

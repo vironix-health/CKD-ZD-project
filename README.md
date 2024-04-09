@@ -84,6 +84,10 @@ This is an updated version of df.csv after processing by eGFR.ipynb. It includes
 
 A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [2]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [3]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
 
+    ANOVA.ipynb
+
+A Jupyter Notebook used to perform ANOVA analysis on various data frames to determine the statistical significance of the relationships between features and a specified target column. The data is imported from respective sources, preprocessed, and passed into a helper function which facilitates ANOVA analysis via the statsmodels library. The evaluated features' calculated p-values are then displayed in increasing order.
+
     XG_boost.ipynb
 
 A Jupyter Notebook that details the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
@@ -94,7 +98,7 @@ To work with the RData file, it is necessary to have R statistical software inst
 
 The CSV and Excel files can be viewed and manipulated using standard data processing tools such as Microsoft Excel, Python (pandas library), or R.
 
-To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts can be executed.
+To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, statsmodels, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, ANOVA.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts can be executed.
 
 # Contributors
 

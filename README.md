@@ -76,9 +76,9 @@ This is an updated version of df.csv after processing by eGFR.ipynb. It includes
 
 ### Subdirectory /iimori_et_al
 
-    5v_cleandf.RData
+    ROUTE_proteinuria_dataset.xlsx
 
-This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
+This is the raw dataset as provided by Iimori et al. It includes a total of 1138 CKD patients, each with 50 features analyzing their risk of CKD progression, cardiovascular events, and mortality.
 
 ## Data Preprocessing
 

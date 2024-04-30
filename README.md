@@ -10,19 +10,7 @@ The study "Prognosis of chronic kidney disease with normal-range proteinuria: Th
 
 # Repository Contents
 
-## MIMIC-IV
-
-    mimic_iv_extract.ipynb
-
-A Jupyter Notebook that first establishes a connection to the MIMIC-IV database via BigQuery, and subsequently extracts a series of relevant dataframes. The datasets are saved as pickle files in the /mimic_ic_extracts subdirectory. Each extracted dataframe is comprehensively detailed within the notebook, and in the README.md under the /mimic_iv_extract subdirectory section.
-
-    mimic_iv_ovrvw.ipynb
-
-A Jupyter Notebook providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database, leveraging data from the df_all_patients.pkl and df_icd_codes_with_description.pkl pickle files. The disease, labe event, and hospitalisation frequency information is summarized in Pandas dataframes, and saved as external Excel files in the /mimic_ic_extracts subdirectory.
-
-    mimic_iv_ckd_ovrvw.ipynb
-
-A Jupyter Notebook providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database, using the df_icd_codes_with_description.pkl pickle file. The patient and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file,  mimic_iv_ckd_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
+## Data Sources
 
 ### Subdirectory /mimic_iv_extract
 
@@ -78,19 +66,43 @@ This is a CSV file conversion of the 5v_cleandf.RData file. It maintains the int
 
 This is an updated version of df.csv after processing by eGFR.ipynb. It includes the newly calculated eGFR and CKD stage columns.
 
-## Data Analysis
+### Subdirectory /iimori_et_al
+
+    5v_cleandf.RData
+
+This is the raw dataset as provided by Hong et al. It includes a total of 560,486 patient entries, each with 972 features including demographics, ED triage variables, and detailed patient medical histories, including medication. This dataset is provided in RData format for compatibility with R statistical software.
+
+## Data Preprocessing
+
+    mimic_iv_extract.ipynb
+
+A Jupyter Notebook that first establishes a connection to the MIMIC-IV database via BigQuery, and subsequently extracts a series of relevant dataframes. The datasets are saved as pickle files in the /mimic_ic_extracts subdirectory. Each extracted dataframe is comprehensively detailed within the notebook, and in the README.md under the /mimic_iv_extract subdirectory section.
+
+    mimic_iv_ovrvw.ipynb
+
+A Jupyter Notebook providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database, leveraging data from the df_all_patients.pkl and df_icd_codes_with_description.pkl pickle files. The disease, labe event, and hospitalisation frequency information is summarized in Pandas dataframes, and saved as external Excel files in the /mimic_ic_extracts subdirectory.
+
+    mimic_iv_ckd_ovrvw.ipynb
+
+A Jupyter Notebook providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database, using the df_icd_codes_with_description.pkl pickle file. The patient and hospitalisation frequency information is summarized in a Pandas dataframe, and saved as the Excel file,  mimic_iv_ckd_ovrvw.xlsx, in the /mimic_ic_extracts subdirectory.
 
     eGFR.ipynb
 
 A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [2]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [3]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
 
+## Data Analysis & Predictive Modeling
+
     ANOVA.ipynb
 
 A Jupyter Notebook used to perform ANOVA analysis on various data frames to determine the statistical significance of the relationships between features and a specified target column. The data is imported from respective sources, preprocessed, and passed into a helper function which facilitates ANOVA analysis via the statsmodels library. The evaluated features' calculated p-values are then displayed in increasing order.
 
+    CHP.ipynb
+
+A Jupyter Notebook detailing the process of training a Cox Proportional Hazards (CPH) model to predict the survival probability of CKD stage progression. The workflow follows importing data from respective sources, preprocessing and partitioning into training and test data, and then training the CHP model to estimate patient survival probabilities. The CHP feature importance summary is are displayed, and survival curves are visualized using Matplotlib.
+
     XG_boost.ipynb
 
-A Jupyter Notebook that details the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
+A Jupyter Notebook that detailing the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
 
 # How to Use
 

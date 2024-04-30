@@ -8,8 +8,6 @@ The study published by Hong et al. [1] utilizes extensive patient data and ML mo
 
 The study "Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" pusblished by Iimori et al. explores the outcomes of chronic kidney disease (CKD) in patients who have normal-range proteinuria. It involved a prospective cohort study of 1138 CKD patients, analyzing their risk of CKD progression, cardiovascular events, and mortality.
 
-# Repository Contents
-
 ## Data Sources
 
 ### Subdirectory /mimic_iv_extract
@@ -49,8 +47,6 @@ A pickle file containing a Pandas dataframe of lab items recorded in the MIMIC-I
     df_height_weight.pkl
 
 A pickle file containing a Pandas dataframe with first, minimum, maximum, and mean measurements for patient height and weight associated with unique hospital admissions in the MIMIC-IV database.
-
-## Hong et al.
 
 ### Subdirectory /hong_et_al
 

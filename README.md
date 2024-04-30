@@ -12,13 +12,21 @@ The study "Prognosis of chronic kidney disease with normal-range proteinuria: Th
 
 ### Subdirectory /mimic_iv_extract
 
-    mimic_iv_ovrvw.xlsx
+    df_diseases_frequency.xlsx
 
 An excel file providing an overview of the disease and hospitalisation frequencies recorded in the MIMIC-IV database. It specifically focuses on CKD comorbidities including hypertension, anemia, diabetes, cardiac disarrhythmias, ischemic heart disease, thyroid disease, heart failure, cerebrovascular disease, and PVD.
 
+    df_labs_frequency.xlsx
+
+An excel file containing a summary of the both the total number of unique patients and hospitalisations recorded in the MIMIC-IV database for lab events of interest with respect to CKD.
+
     ckd_stage_frequency.xlsx
 
-An excel file providing an overview of the patient and hospitalisation frequencies for each CKD ICD-9 code recorded in the MIMIC-IV database. There are a total of seven ICD-9 codes extracted corresponding to the five progressive stages of CKD, end stage renal disease, and unspecified stage CKD.
+An excel file containing a summary of the both the total number of unique patients and hospitalisations recorded in the MIMIC-IV database for all CKD stage diagnoses (i.e. Chronic kidney disease, Stage I; Chronic kidney disease, Stage II (mild); Chronic kidney disease, Stage III (moderate); Chronic kidney disease, Stage IV (severe); Chronic kidney disease, Stage V; End stage renal disease; Chronic kidney disease, unspecified).
+    
+    df_ckd_lab_summary.xlsx
+
+An excel file providing a summary of CKD stage progression a measured by lab events in the recorded in the MIMIC-IV database. The frame contain the first and last recorded eGFR values and CKD stage diagnoses for each unique patient with applicable values recorded in MIMIC-IV.
 
     df_all_patients.pkl
 
@@ -39,6 +47,10 @@ A pickle file containing a Pandas dataframe of the ICD-9 codes and long-title di
     df_lab_items.pkl
 
 A pickle file containing a Pandas dataframe of all lab items recorded in the MIMIC-IV database, including the lab item ID's, labels, categories, and associated lab fluid (e.g. Cerebrospinal Fluid).
+
+    df_lab_events.pkl
+
+A pickle file containing a Pandas dataframe of all charted lab events that can be of interest to CKD patients recorded in the MIMIC-IV database, including the patient subject ID, HADM ID, lab item ID, charttime, and recorded lab result values.
 
     df_ckd_lab_items.pkl
 

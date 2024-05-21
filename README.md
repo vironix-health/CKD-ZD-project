@@ -2,11 +2,11 @@
 
 This is a repository containing analysis for the freely available MIMIC-IV database, as well as two supplementary datasets from the studies "Predicting hospital admission at emergency department triage using machine learning" by Hong et al and "Data from: Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" by Iimori et al.
 
-MIMIC-IV [4] (Medical Information Mart for Intensive Care, Version IV) is an extensive database comprising de-identified health-related data associated with over 180,000 thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center in Boston, Massachusetts. It is an update and expansion of the earlier MIMIC-III database and includes data such as vital signs, medications, laboratory measurements, observations and notes taken by care providers, fluid balance, procedure codes, diagnostic codes, imaging reports, hospital length of stay, survival data, and more.
+MIMIC-IV [1] (Medical Information Mart for Intensive Care, Version IV) is an extensive database comprising de-identified health-related data associated with over 180,000 thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center in Boston, Massachusetts. It is an update and expansion of the earlier MIMIC-III database and includes data such as vital signs, medications, laboratory measurements, observations and notes taken by care providers, fluid balance, procedure codes, diagnostic codes, imaging reports, hospital length of stay, survival data, and more.
 
-The study published by Hong et al. [1] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history. In contrast to MIMIC-IV, this dataset is weighted more towards emergency department triage features prior to hospital admission.
+The study published by Hong et al. [2] utilizes extensive patient data and ML models to predict hospital admissions, focusing on the relevance of various patient features including demographic information, emergency department triage variables, and medical history. In contrast to MIMIC-IV, this dataset is weighted more towards emergency department triage features prior to hospital admission.
 
-The study "Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" pusblished by Iimori et al. explores the outcomes of chronic kidney disease (CKD) in patients who have normal-range proteinuria. It involved a prospective cohort study of 1138 CKD patients, analyzing their risk of CKD progression, cardiovascular events, and mortality.
+The study "Prognosis of chronic kidney disease with normal-range proteinuria: The CKD-ROUTE study" pusblished by Iimori et al. [3] explores the outcomes of chronic kidney disease (CKD) in patients who have normal-range proteinuria. It involved a prospective cohort study of 1138 CKD patients, analyzing their risk of CKD progression, cardiovascular events, and mortality.
 
 ## Data Sources
 
@@ -96,7 +96,7 @@ A Jupyter Notebook providing an overview of the patient and hospitalisation freq
 
     eGFR.ipynb
 
-A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [2]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [3]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
+A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [4]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [5]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
 
 ## Data Analysis & Predictive Modeling
 
@@ -110,7 +110,7 @@ A Jupyter Notebook detailing the process of training a Cox Proportional Hazards 
 
     XG_boost.ipynb
 
-A Jupyter Notebook that detailing the process of identifying the features most relevant to eGFR via XGBoost regression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor is trained and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
+A Jupyter Notebook detailing the process of developing XGBoost classification and regression models from multiple datasets, identifying features most relevant to CKD progression. The data is preprocessed and partitioned into training and test data, then an XGBRegressor and XGBClassifier are tuned with Bayesian Hyperparameter Optimization, trained, and used to evaluate the feature importance. The model's feature importance rankings are displayed and visualized using Matplotlib and Seaborn.
 
 # How to Use
 
@@ -118,7 +118,7 @@ To work with the RData file, it is necessary to have R statistical software inst
 
 The CSV and Excel files can be viewed and manipulated using standard data processing tools such as Microsoft Excel, Python (pandas library), or R.
 
-To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, statsmodels, seaborn, matplotlib, sklearn). With the prerequisites installed Jupyter Notebook can be launched from the project directory, and the eGFR.ipynb, ANOVA.ipynb, featuresID.ipynb, mimic_iv_extract.ipynb, mimic_iv_ovrvw.ipynb, and mimic_iv_ckd_ovrvw.ipynb scripts can be executed.
+To execute analyses in the Jupyter Notebooks, it is necessary to have Jupyter installed, along with Python and the necessary libraries (pandas, numpy, os, google-cloud-bigquery, xgboost, statsmodels, seaborn, matplotlib, sklearn). In order to execute the Bayesian hyperparameter optimization and model training within XG_boost.ipynb, it is necessary to have access to a GPU device. With the prerequisites installed, the Jupyter Notebooks can be launched from the project directory, and all other scripts can be executed.
 
 # Contributors
 
@@ -126,16 +126,18 @@ Vaibhav Mahajan, (St Catherine's College, University of Oxford)
 
 # References
 
-[1] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0201016
+[1] https://physionet.org/content/mimiciv/2.2/
 
-[2] https://www.kidney.org/content/ckd-epi-creatinine-equation-2021
+[2] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0201016
 
-[3] https://www.nhs.uk/conditions/kidney-disease/diagnosis/
+[3] https://datadryad.org/stash/dataset/doi:10.5061/dryad.kq23s
 
-[4] https://physionet.org/content/mimiciv/2.2/
+[4] https://www.kidney.org/content/ckd-epi-creatinine-equation-2021
+
+[5] https://www.nhs.uk/conditions/kidney-disease/diagnosis/
  
 # Supplementary Resources
 
-[5] https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271619#abstract0
+[6] https://www.nature.com/articles/s41598-023-36214-0
 
-[6] https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0295234#sec003
+[7] https://bmcnephrol.biomedcentral.com/articles/10.1186/s12882-021-02496-7#Abs1

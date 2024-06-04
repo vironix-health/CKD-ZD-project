@@ -116,9 +116,9 @@ A Jupyter Notebook detailing the process of developing a simple neural network, 
 
 A Jupyter Notebook detailing the process of developing a residual neural network, identifying features most relevant to eGFR prediction. The data is preprocessed and partitioned into training and test data, dataloaders are prepared, then a residual neural network structure is defined, trained, and used to evaluate the feature importance. The model's feature importance is demonstrated via a SHAP explainer, and the summary plot is displayed.
 
-    CHP.ipynb
+    CPH.ipynb
 
-A Jupyter Notebook detailing the process of training a Cox Proportional Hazards (CPH) model to predict the survival probability of CKD stage progression. The workflow follows importing data from respective sources, preprocessing and partitioning into training and test data, and then training the CHP model to estimate patient survival probabilities. The CHP feature importance summary is are displayed, and survival curves are visualized using Matplotlib.
+A Jupyter Notebook detailing the process of training a Cox Proportional Hazards (CPH) model to predict the survival probability of CKD stage progression. The workflow follows importing data from respective sources, preprocessing and partitioning into training and test data, and then training the CPH model to estimate patient survival probabilities. The CPH feature importance summary is are displayed, and survival curves are visualized using Matplotlib.
 
 
 

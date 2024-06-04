@@ -98,7 +98,7 @@ A Jupyter Notebook providing an overview of the patient and hospitalisation freq
 
 A Jupyter Notebook that details the process of calculating the Estimated Glomerular Filtration Rate (eGFR) for all patients in a designated dataset. The eGFR calculation is based on the CKD-EPI Creatinine Equation [4]. Following the calculation, this notebook also labels each patient with a Chronic Kidney Disease (CKD) stage ranging from 1 to 5 based on their eGFR values [5]. Additionally, the notebook provides a summary of statistical results derived from the eGFR and CKD stage calculations. The eGFR.ipynb notebook is used to calculate the eGFR and assign CKD stage labels for all three data sources.
 
-## Data Analysis & Predictive Modeling-0
+## Data Analysis & Predictive Modeling
 
     ANOVA.ipynb
 

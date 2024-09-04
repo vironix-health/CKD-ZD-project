@@ -16,8 +16,10 @@ import matplotlib.pyplot as plt
 import warnings
 
 # Cleaned Master MIMIC Data Set
-df_master = pd.read_pickle('/home/ammar/work/CKD-ZD-project/MIMIC_IV/df_ckd_master_clean.pkl')
-df_base = pd.read_pickle('/home/ammar/work/CKD-ZD-project/MIMIC_IV/df_ckd_base.pkl')
+df_master = pd.read_pickle(
+    "/home/ammar/work/CKD-ZD-project/MIMIC_IV/df_ckd_master_clean.pkl"
+)
+df_base = pd.read_pickle("/home/ammar/work/CKD-ZD-project/MIMIC_IV/df_ckd_base.pkl")
 
 # Drop unnecessary columns
 drop_cols = [
@@ -89,12 +91,12 @@ X_traindev, y_traindev, X_test, y_test, val_sets = create_splits(X, y, test_size
 
 # Initialize classification models #modified
 models = {
-    "Logistic Regression": LogisticRegression(max_iter=1000),
-    "Linear SVM": SVC(kernel="linear", probability=True),
+    # "Decision Tree": DecisionTreeClassifier(),
+    # "Random Forest": RandomForestClassifier(),
+    # "Logistic Regression": LogisticRegression(max_iter=1000),
+    # "Linear SVM": SVC(kernel="linear", probability=True),
     "Kernel SVM": SVC(kernel="rbf", probability=True),
-    "Decision Tree": DecisionTreeClassifier(),
-    "Random Forest": RandomForestClassifier(),
-    "KNN": KNeighborsClassifier(),
+    # "KNN": KNeighborsClassifier(),
 }
 
 
@@ -130,14 +132,14 @@ auc_spaces = {
     "Linear SVM": [Real(0.01, 1.0, name="C")],
     "Kernel SVM": [Real(0.01, 1.0, name="C"), Real(0.01, 10.0, name="gamma")],
     "Decision Tree": [
-        Integer(2, 50, name="max_depth"),
-        Integer(1, 20, name="min_samples_split"),
+        Integer(1, 50, name="max_depth"),
+        Integer(2, 20, name="min_samples_split"),
         Integer(1, 20, name="min_samples_leaf"),
     ],
     "Random Forest": [
         Integer(50, 200, name="n_estimators"),
         Integer(2, 50, name="max_depth"),
-        Integer(1, 20, name="min_samples_split"),
+        Integer(2, 20, name="min_samples_split"),
         Integer(1, 20, name="min_samples_leaf"),
     ],
     "KNN": [Integer(1, 50, name="n_neighbors")],
@@ -194,6 +196,10 @@ for model_name, model in models.items():
     # Compute SHAP values for a set of data
     shap_values = explainer.shap_values(X_test)
 
+    if len(shap_values.shape) == 3:  # For KernelExplainer output
+        # Use the SHAP values for the positive class
+        shap_values = shap_values[:, :, 1]
+
     # List of feature names to remove
     SHAP_feature_names = X.columns.tolist()
     KFRE_feature_names = df_base.columns.tolist()  # replace with actual feature names
@@ -216,7 +222,7 @@ for model_name, model in models.items():
     ]
 
     # Calculate the mean absolute SHAP value for each feature
-    mean_abs_shap_values = np.mean(np.abs(filtered_shap_values), axis=0)
+    mean_abs_shap_values = np.mean(np.abs(filtered_shap_values), axis=0)  # ISSUE
 
     # Sort SHAP indices, values, and feature names by mean absolute SHAP value
     sorted_shap_indices = np.argsort(mean_abs_shap_values)[::-1]
@@ -225,12 +231,15 @@ for model_name, model in models.items():
 
     # Extract top 40 features
     top_n = 40
-    top_shap_values = sorted_shap_values[:top_n]
+    top_shap_values = sorted_shap_values[:top_n]  # (40, 2, 2)
     XGboost40 = sorted_feature_names[:top_n]  # Adjust the name as necessary for clarity
 
     # Create a horizontal bar plot
     plt.figure(figsize=(6, 8))
+    # breakpoint()
     plt.barh(XGboost40[::-1], top_shap_values[::-1], color="skyblue")
+    # plt.barh(range(len(XGboost40)), top_shap_values[::-1], color="skyblue")
+    # plt.yticks(range(len(XGboost40)), [str(x) for x in XGboost40[::-1]])
     plt.xlabel("mean(|SHAP value|) (average impact on model output magnitude)")
     plt.title(model_name)
 

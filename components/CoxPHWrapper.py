@@ -65,7 +65,7 @@ class CoxPHWrapper:
         cph_summary = self.cph.summary
 
         # Save the summary to a CSV file
-        cph_summary.to_csv(f"models/{self.cfg['tag']}_CoxPH_Summary.csv", index=True)
+        cph_summary.to_csv(f"tables/{self.cfg['name']}/{self.cfg['tag']}_CoxPH_Summary.csv", index=True)
 
         # Print the model summary
         display(cph_summary)       
@@ -89,7 +89,7 @@ class CoxPHWrapper:
         plt.gca().invert_yaxis()  # Invert y-axis to show the most important feature at the top
 
         # Save the plot as a PNG file
-        plt.savefig(f"figs/{self.cfg['tag']}_CoxPH_FeatureRank.png", format="png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"figs/{self.cfg['name']}/{self.cfg['tag']}_CoxPH_FeatureRank.png", format="png", dpi=300, bbox_inches="tight")
 
         plt.show()
 
@@ -99,7 +99,7 @@ class CoxPHWrapper:
         results_summary = results.summary
 
         # Save the results summary to a CSV file
-        results_summary.to_csv(f"models/{self.cfg['tag']}_CoxPH_Schoenfeld.csv", index=True)
+        results_summary.to_csv(f"tables/{self.cfg['name']}/{self.cfg['tag']}_CoxPH_Schoenfeld.csv", index=True)
 
         display(results_summary)
 
@@ -144,7 +144,7 @@ class CoxPHWrapper:
         plt.ylim(-0.01, 0.225)
 
         # Save the plot as a PNG file
-        plt.savefig(f"figs/{self.cfg['tag']}_Brier.png", format="png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"figs/{self.cfg['name']}/{self.cfg['tag']}_Brier.png", format="png", dpi=300, bbox_inches="tight")
 
         plt.show()
 
@@ -179,7 +179,7 @@ class CoxPHWrapper:
         plt.ylim(0.70, 1.0)
 
         # Save the plot as a PNG file
-        plt.savefig(f"figs/{self.cfg['tag']}_DynamicAUC.png", format="png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"figs/{self.cfg['name']}/{self.cfg['tag']}_DynamicAUC.png", format="png", dpi=300, bbox_inches="tight")
 
         plt.show()
 
@@ -215,7 +215,7 @@ class CoxPHWrapper:
         plt.legend()
 
         # Save the plot as a PNG file
-        plt.savefig(f"figs/{self.cfg['tag']}_SurvCurv{stage}.png", format="png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"figs/{self.cfg['name']}/{self.cfg['tag']}_SurvCurv{stage}.png", format="png", dpi=300, bbox_inches="tight")
 
         plt.show()
 

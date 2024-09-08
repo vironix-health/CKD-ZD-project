@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import torch
+from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
@@ -8,49 +10,31 @@ class DataHandler:
     def __init__(self, cfg, master, base, preprocess=True):
         self.cfg = cfg
         self.master = self.preprocess(master) if preprocess else master
+        self.master_features = None
         self.base = base
-        self.scaler = StandardScaler()  # Initialize the scaler
-        self.scale_flag = True if cfg['tag'] in ['lr'] else False
+        self.augment = None
+        
         self.X_traindev = None
         self.y_traindev = None
         self.X_test = None
         self.y_test = None
         self.val_sets = None
-        self.master_features = None
-        self.augment = None
+
+        self.X_train_tensor = None
+        self.X_test_tensor = None
+        self.y_train_tensor = None
+        self.y_test_tensor = None
+        self.train_dataset = None
+        self.test_dataset = None
+        self.train_loader = None
+        self.test_loader = None
+
+        self.scaler = StandardScaler()  # Initialize the scaler
+        self.scale_flag = True if cfg['tag'] in ['lr', 'fcnn', 'rsnt'] else False
 
     # ------------------------------------------------      DATA HANDLING      ------------------------------------------------ #
     
     def preprocess(self, data):
-        # Drop unnecessary columns
-        drop_cols = [
-            'anchor_year',
-            'anchor_year_group',
-            "hadm_id_first",
-            "admittime_first",
-            "hadm_id_last",
-            "dischtime_last",
-            "hadm_id_first_CKD",
-            "admittime_CKD",
-            "hadm_id_last_CKD",
-            "dischtime_CKD", 
-            'hospital_expire_flag',
-            'deathtime',
-            "first_stage_icd",
-            "CKD_stage_last",
-            "last_stage_icd",
-            "Creatinine_first_time",
-            "Creatinine_last_time",
-            "Creatinine_min_time",
-            "Creatinine_max_time",
-            "Creatinine_mean_time",
-            "Creatinine_median_time"
-        ]
-
-        data.drop(columns=drop_cols, axis=1, inplace=True)
-        data = data.drop(columns=data.filter(like="CKD_stage_last").columns)
-        data = data.drop(columns=data.filter(like="last_stage_icd").columns)
-        data = data.drop(columns=data.filter(like="last_long_title").columns)
         data = data.drop(columns=data.filter(like='Chronic kidney disease').columns)
         data = data.drop(columns=data.filter(like='chronic kidney disease').columns)
         data = data.drop(columns=data.filter(like='End stage renal').columns)
@@ -97,6 +81,24 @@ class DataHandler:
             })
 
         self.val_sets = val_sets
+
+    def tensorWorkFlow(self):
+        # Convert data to PyTorch tensors
+        self.X_train_tensor = torch.tensor(self.X_traindev, dtype=torch.float32)
+        self.X_test_tensor = torch.tensor(self.X_test, dtype=torch.float32)
+        self.y_train_tensor = torch.tensor(self.y_traindev.values, dtype=torch.float32).view(-1, 1)
+        self.y_test_tensor = torch.tensor(self.y_test.values, dtype=torch.float32).view(-1, 1)
+
+        # Ensure no NaN values in tensors
+        assert not self.X_train_tensor.isnan().any(), "NaN values found in X_train_tensor"
+        assert not self.y_train_tensor.isnan().any(), "NaN values found in y_train_tensor"
+
+        # Create DataLoader for batch processing
+        self.train_dataset = TensorDataset(self.X_train_tensor, self.y_train_tensor)
+        self.test_dataset = TensorDataset(self.X_test_tensor, self.y_test_tensor)
+
+        self.train_loader = DataLoader(self.train_dataset, batch_size=64, shuffle=True)
+        self.test_loader = DataLoader(self.test_dataset, batch_size=64, shuffle=False)
 
     def baseAugmentation(self, novel_features):
         # Select these columns from df_source

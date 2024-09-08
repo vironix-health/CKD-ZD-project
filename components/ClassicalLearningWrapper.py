@@ -1,6 +1,7 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import roc_auc_score
@@ -21,7 +22,7 @@ class ClassicalLearningWrapper:
             'lr': LogisticRegression(max_iter=1000),
             # 'lsvm': SVC(kernel="linear", probability=True),
             # "Kernel SVM": SVC(kernel="rbf", probability=True),
-            # "KNN": KNeighborsClassifier(),
+            # 'knn': KNeighborsClassifier(),
         }
         self.model = self.model_tags[cfg['tag']]
         self.best_auc_params = None

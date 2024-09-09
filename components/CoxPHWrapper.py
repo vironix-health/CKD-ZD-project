@@ -168,6 +168,13 @@ class CoxPHWrapper:
             times=valid_times
         )
 
+        # Calculate and print average Brier scores at 1, 2, 3, 4, and 5 years
+        year_days = [365, 2*365, 3*365, 4*365, 5*365]
+        for year, days in enumerate(year_days, start=1):
+            closest_time = min(valid_times, key=lambda x: abs(x - days))
+            avg_brier_score = brier_scores[valid_times == closest_time].mean()
+            print(f'Brier Score at {year} year(s): {avg_brier_score:.4f}')
+
         # Create a plot of Brier scores over time
         plt.figure(figsize=(14, 8))
         plt.plot(valid_times, brier_scores, marker='o', markersize=3)
@@ -206,6 +213,13 @@ class CoxPHWrapper:
 
         # Compute time-dependent ROC curves using valid times
         auc_values, mean_auc = cumulative_dynamic_auc(survival_train, survival_test, risk_scores, valid_times)
+
+        # Calculate and print average AUC scores at 1, 2, 3, 4, and 5 years
+        year_days = [365, 2*365, 3*365, 4*365, 5*365]
+        for year, days in enumerate(year_days, start=1):
+            closest_time = min(valid_times, key=lambda x: abs(x - days))
+            avg_auc_score = auc_values[valid_times == closest_time].mean()
+            print(f'AUC at {year} year(s): {avg_auc_score:.4f}')
 
         # Plot mean AUC over time
         plt.figure(figsize=(14, 8))

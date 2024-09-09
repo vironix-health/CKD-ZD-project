@@ -3,11 +3,17 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import roc_auc_score
 import numpy as np
-import pickle
 
-# Define Fully Connected Neural Network
+# -----------------------------------------------------      MODEL ARCHITECTURES      ----------------------------------------------------- #
+
 class FCNN(nn.Module):
     def __init__(self, input_dim):
+        """
+        Initialize the FCNN class with the input dimension.
+
+        Parameters:
+        - input_dim: Dimension of the input features.
+        """
         super(FCNN, self).__init__()
         self.layers = nn.Sequential(
             nn.Linear(input_dim, 512),
@@ -23,18 +29,42 @@ class FCNN(nn.Module):
         )
 
     def forward(self, x):
+        """
+        Forward pass through the FCNN.
+
+        Parameters:
+        - x: Input tensor.
+
+        Returns:
+        - Output tensor.
+        """
         x = self.layers(x)
         return x
     
-# Define single residual block for tabular data
 class ResNetBlock(nn.Module):
     def __init__(self, input_dim, hidden_dim):
+        """
+        Initialize the ResNetBlock class with input and hidden dimensions.
+
+        Parameters:
+        - input_dim: Dimension of the input features.
+        - hidden_dim: Dimension of the hidden features.
+        """
         super(ResNetBlock, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(hidden_dim, input_dim)
     
     def forward(self, x):
+        """
+        Forward pass through the ResNetBlock.
+
+        Parameters:
+        - x: Input tensor.
+
+        Returns:
+        - Output tensor after applying residual connection.
+        """
         residual = x  # Save the input for the residual connection
         out = self.fc1(x)
         out = self.relu(out)
@@ -43,9 +73,17 @@ class ResNetBlock(nn.Module):
         out = self.relu(out)
         return out
 
-# Define ResNet model for tabular data
 class ResNetForTabular(nn.Module):
     def __init__(self, input_dim, num_blocks, hidden_dim, num_classes):
+        """
+        Initialize the ResNetForTabular class with input dimension, number of blocks, hidden dimension, and number of classes.
+
+        Parameters:
+        - input_dim: Dimension of the input features.
+        - num_blocks: Number of residual blocks.
+        - hidden_dim: Dimension of the hidden features.
+        - num_classes: Number of output classes.
+        """
         super(ResNetForTabular, self).__init__()
         self.initial_fc = nn.Linear(input_dim, hidden_dim)  # Initial fully connected layer
         self.res_blocks = nn.Sequential(
@@ -54,14 +92,31 @@ class ResNetForTabular(nn.Module):
         self.final_fc = nn.Linear(hidden_dim, num_classes)  # Output layer with num_classes outputs
     
     def forward(self, x):
+        """
+        Forward pass through the ResNetForTabular.
+
+        Parameters:
+        - x: Input tensor.
+
+        Returns:
+        - Output tensor.
+        """
         out = self.initial_fc(x)
         out = self.res_blocks(out)
         out = self.final_fc(out)
         return out
 
+# -----------------------------------------------------      WRAPPER CLASS      ----------------------------------------------------- #
 
 class DeepLearningWrapper:
     def __init__(self, cfg, input_dim):
+        """
+        Initialize the DeepLearningWrapper class with configuration settings.
+
+        Parameters:
+        - cfg: Configuration dictionary containing various settings.
+        - input_dim: Dimension of the input features.
+        """
         self.cfg = cfg
         self.model = FCNN(input_dim) if self.cfg['tag'] == 'fcnn' else ResNetForTabular(input_dim, self.cfg['num_blocks'], self.cfg['hidden_dim'], self.cfg['num_classes'])
         self.criterion = nn.BCEWithLogitsLoss()
@@ -75,6 +130,13 @@ class DeepLearningWrapper:
     # -----------------------------------------------------      TRAINER      ----------------------------------------------------- #  
 
     def Trainer(self, train_loader, val_loader):
+        """
+        Train the model using the provided training and validation data loaders.
+
+        Parameters:
+        - train_loader: DataLoader for the training data.
+        - val_loader: DataLoader for the validation data.
+        """
         early_stop_count = 0
 
         for epoch in range(self.cfg['epochs']):
@@ -113,6 +175,15 @@ class DeepLearningWrapper:
         torch.save(self.model.state_dict(), f"models/{self.cfg['tag']}_MIMIC.pth")
 
     def _validate(self, val_loader):
+        """
+        Validate the model using the provided validation data loader.
+
+        Parameters:
+        - val_loader: DataLoader for the validation data.
+
+        Returns:
+        - Average validation loss.
+        """
         self.model.eval()
         val_loss = 0.0
         with torch.no_grad():
@@ -128,6 +199,15 @@ class DeepLearningWrapper:
     # -----------------------------------------------------      EVALUATOR      ----------------------------------------------------- #
 
     def Evaluator(self, test_loader):
+        """
+        Evaluate the model on the test set and print the AUC score.
+
+        Parameters:
+        - test_loader: DataLoader for the test data.
+
+        Returns:
+        - AUC score on the test set.
+        """
         self.model.eval()
         all_predictions = []
         all_labels = []

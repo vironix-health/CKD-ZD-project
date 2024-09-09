@@ -7,6 +7,14 @@ from components.CoxPHWrapper import CoxPHWrapper
 
 class Driver:
     def __init__(self, cfg, master, base):
+        """
+        Initialize the Driver class with configuration settings, master dataset, and base dataset.
+
+        Parameters:
+        - cfg: Configuration dictionary containing various settings.
+        - master: Master dataset.
+        - base: Base dataset.
+        """
         self.cfg = cfg
         self.master = master
         self.base = base
@@ -14,11 +22,15 @@ class Driver:
     # --------------------------------------------------      PIPELINES      -------------------------------------------------- #   
 
     def ClassicalLearningPipe(self):
+        """
+        Execute the classical learning pipeline which includes data handling, model training, evaluation, 
+        SHAP value computation, feature selection, and CoxPH evaluation.
+        """
         # Split data into training, testing, and validation sets
         Data = DataHandler(self.cfg, self.master, self.base)
         Data.split_ValSets()
         
-        # Initialize XGBoostWrapper and perform Bayesian hyperparameter optimization
+        # Initialize ClassicalLearningWrapper and perform Bayesian hyperparameter optimization
         CLWrapper = ClassicalLearningWrapper(self.cfg)
         CLWrapper.BayesianHyperparameterOptimizer(Data.val_sets)
         CLWrapper.Trainer(Data.X_traindev, Data.y_traindev)
@@ -50,12 +62,16 @@ class Driver:
         CoxPH.plot_SurvivalCurves(2, 5) # Plot survival curves for CKD stages 2-5
 
     def DeepLearningPipe(self):
+        """
+        Execute the deep learning pipeline which includes data handling, model training, evaluation, 
+        SHAP value computation, feature selection, and CoxPH evaluation.
+        """
         # Split data into train and test; initialize tensors and dataloaders
         Data = DataHandler(self.cfg, self.master, self.base)
         Data.split_Vanilla()
         Data.tensorWorkFlow()
 
-        # Initialize XGBoostWrapper and perform Bayesian hyperparameter optimization
+        # Initialize DeepLearningWrapper and perform training and evaluation
         DLWrapper = DeepLearningWrapper(self.cfg, Data.X_traindev.shape[1])
         DLWrapper.Trainer(Data.train_loader, Data.test_loader)
         DLWrapper.Evaluator(Data.test_loader)

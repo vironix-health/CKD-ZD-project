@@ -10,14 +10,32 @@ import matplotlib.pyplot as plt
 import statistics
 import copy
 
-
 class CoxPHWrapper:
     def __init__(self, cfg, base_augment):
+        """
+        Initialize the CoxPHWrapper class with configuration settings and base augmented data.
+
+        Parameters:
+        - cfg: Configuration dictionary containing various settings.
+        - base_augment: The base dataset for augmentation.
+        """
         self.cfg = cfg
         self.base_augment = base_augment
         self.best_c_index, self.avg_c_index, self.std_c_index, self.cph, self.train, self.test = self.cph_KFold()
 
+    # --------------------------------------------------      COX MODEL K-FOLD CROSS-VALIDATION      -------------------------------------------------- #
     def cph_KFold(self):
+        """
+        Perform K-Fold cross-validation for the Cox Proportional Hazards model.
+
+        Returns:
+        - best_c_index: Best C-index from cross-validation.
+        - avg_c_index: Average C-index from cross-validation.
+        - std_c_index: Standard deviation of C-index from cross-validation.
+        - cph: Best CoxPHFitter model.
+        - best_train_split: Best training split.
+        - best_test_split: Best test split.
+        """
         # Initialize variables to store the best split and best score
         scores = []
         cph = None
@@ -55,13 +73,18 @@ class CoxPHWrapper:
         avg_c_index = statistics.mean(scores)
         std_c_index = statistics.stdev(scores)
 
-        print(f'Average C-Index from cross-validation: {avg_c_index:.4f}') # Output the average C-index from cross validation
-        print(f'Best C-Index from cross-validation: {best_c_index:.4f}') # Output the best C-index and the corresponding train/test split indices
-        print(f'Standard Deviation of C-Index from cross-validation: {std_c_index:.4f}') # Output the standard deviation of C-index from cross validation
+        # Output the average, best, and standard deviation of C-index from cross-validation
+        print(f'Average C-Index from cross-validation: {avg_c_index:.4f}')
+        print(f'Best C-Index from cross-validation: {best_c_index:.4f}')
+        print(f'Standard Deviation of C-Index from cross-validation: {std_c_index:.4f}')
 
         return best_c_index, avg_c_index, std_c_index, cph, best_train_split, best_test_split
 
+    # --------------------------------------------------      COX MODEL SUMMARY      -------------------------------------------------- #
     def Summary(self):
+        """
+        Display and save the summary of the Cox Proportional Hazards model.
+        """
         cph_summary = self.cph.summary
 
         # Save the summary to a CSV file
@@ -70,7 +93,11 @@ class CoxPHWrapper:
         # Print the model summary
         display(cph_summary)       
 
+    # --------------------------------------------      COX MODEL FEATURE IMPORTANCE    -------------------------------------------- #
     def FeatureRank(self):
+        """
+        Plot and save the feature importance based on the coefficients of the Cox model.
+        """
         # Extract the coefficients and their corresponding feature names
         coefficients = self.cph.params_
         feature_importances = pd.DataFrame({
@@ -93,7 +120,11 @@ class CoxPHWrapper:
 
         plt.show()
 
+    # --------------------------------------------------      SCHOENFELD TEST      -------------------------------------------------- #
     def SchoenfeldTest(self):
+        """
+        Perform Schoenfeld test to assess the proportional hazards assumption and save the results.
+        """
         # Perform Schoenfeld test to assess the proportional hazards assumption
         results = proportional_hazard_test(self.cph, self.train, time_transform='rank')
         results_summary = results.summary
@@ -103,7 +134,11 @@ class CoxPHWrapper:
 
         display(results_summary)
 
+    # --------------------------------------------------      COX MODEL PLOTS      -------------------------------------------------- #
     def plot_BrierScore(self):
+        """
+        Plot and save the Brier score over time.
+        """
         # Prepare the survival data in the format required by scikit-survival
         survival_train = Surv.from_dataframe(self.cfg['response'], self.cfg['duration'], self.train)
         survival_test = Surv.from_dataframe(self.cfg['response'], self.cfg['duration'], self.test)
@@ -149,6 +184,9 @@ class CoxPHWrapper:
         plt.show()
 
     def plot_DynamicAUC(self):
+        """
+        Plot and save the time-dependent AUC over time.
+        """
         # Prepare the survival data in the format required by scikit-survival
         survival_train = Surv.from_dataframe(self.cfg['response'], self.cfg['duration'], self.train)
         survival_test = Surv.from_dataframe(self.cfg['response'], self.cfg['duration'], self.test)
@@ -184,6 +222,12 @@ class CoxPHWrapper:
         plt.show()
 
     def plot_SurvivalCurve(self, stage):
+        """
+        Plot and save the survival curves for a given CKD stage.
+
+        Parameters:
+        - stage: CKD stage to filter the test set.
+        """
         # Filter the test set for the given CKD stage
         test_stage = self.test[self.test['CKD_stage_first'] == stage]
 
@@ -220,5 +264,12 @@ class CoxPHWrapper:
         plt.show()
 
     def plot_SurvivalCurves(self, start, stop):
+        """
+        Plot and save the survival curves for a range of CKD stages.
+
+        Parameters:
+        - start: Starting CKD stage.
+        - stop: Ending CKD stage.
+        """
         for stage in range(start, stop + 1):
-            self.plot_SurvivalCurve(stage) # Plot survival curves for CKD stages in range [start, stop]
+            self.plot_SurvivalCurve(stage)  # Plot survival curves for CKD stages in range [start, stop]

@@ -6,7 +6,7 @@ from components.CoxPHWrapper import CoxPHWrapper
 
 
 class Driver:
-    def __init__(self, cfg, master, base):
+    def __init__(self, cfg, master=None, base=None):
         """
         Initialize the Driver class with configuration settings, master dataset, and base dataset.
 
@@ -20,6 +20,19 @@ class Driver:
         self.base = base
 
     # --------------------------------------------------      PIPELINES      -------------------------------------------------- #   
+
+    def VanillaPipe(self):
+        """
+        Execute the vanilla pipeline which includes only CoxPH evaluation with base dataset.
+        """
+        CoxPH = CoxPHWrapper(self.cfg, self.base) # Initialize CoxPHWrapper with base dataset
+        CoxPH.Summary()
+        CoxPH.FeatureRank()
+        CoxPH.SchoenfeldTest()
+        CoxPH.plot_BrierScore()
+        CoxPH.plot_DynamicAUC()
+        CoxPH.plot_SurvivalCurves(2, 5) # Plot survival curves for CKD stages 2-5
+        
 
     def ClassicalLearningPipe(self):
         """

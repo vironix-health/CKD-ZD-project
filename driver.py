@@ -3,6 +3,7 @@ from components.SHAPSelector import SHAPSelector
 from components.ClassicalLearningWrapper import ClassicalLearningWrapper
 from components.DeepLearningWrapper import DeepLearningWrapper
 from components.CoxPHWrapper import CoxPHWrapper
+import pickle
 
 
 class Driver:
@@ -33,6 +34,8 @@ class Driver:
         CoxPH.plot_DynamicAUC()
         CoxPH.plot_SurvivalCurves(2, 5) # Plot survival curves for CKD stages 2-5
         
+        with open(f"models/{self.cfg['tag']}_CoxPH.pkl", 'wb') as f:
+            pickle.dump(CoxPH, f)
 
     def ClassicalLearningPipe(self):
         """
@@ -73,6 +76,9 @@ class Driver:
         CoxPH.plot_BrierScore()
         CoxPH.plot_DynamicAUC()        
         CoxPH.plot_SurvivalCurves(2, 5) # Plot survival curves for CKD stages 2-5
+
+        with open(f"models/{self.cfg['tag']}_CoxPH.pkl", 'wb') as f:
+            pickle.dump(CoxPH, f)
 
     def DeepLearningPipe(self):
         """
@@ -115,5 +121,8 @@ class Driver:
         CoxPH.plot_BrierScore()
         CoxPH.plot_DynamicAUC()        
         CoxPH.plot_SurvivalCurves(2, 5) # Plot survival curves for CKD stages 2-5
+
+        with open(f"models/{self.cfg['tag']}_CoxPH.pkl", 'wb') as f:
+            pickle.dump(CoxPH, f)
 
 

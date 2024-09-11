@@ -48,18 +48,17 @@ class Driver:
         
         # Initialize ClassicalLearningWrapper and perform Bayesian hyperparameter optimization
         CLWrapper = ClassicalLearningWrapper(self.cfg)
-        CLWrapper.BayesianHyperparameterOptimizer(Data.val_sets)
-        CLWrapper.Trainer(Data.X_traindev, Data.y_traindev)
-        CLWrapper.Evaluator(Data.X_test, Data.y_test)
+        CLWrapper.BayesianHyperparameterOptimizer(Data.seed_splits)
+        CLWrapper.Evaluator(Data.seed_splits)
 
         # Compute SHAP values, select novel predictor features
         Selector = SHAPSelector(
             self.cfg,
             Data.master_features,
             self.base, 
-            CLWrapper.model, 
-            Data.X_traindev,
-            Data.X_test, 
+            CLWrapper.model,
+            CLWrapper.X_traindev,
+            CLWrapper.X_test, 
         )
         Selector.SHAP_FeatureFilter()
         Selector.plot_SHAPma()
@@ -91,20 +90,19 @@ class Driver:
         Data.tensorWorkFlow()
 
         # Initialize DeepLearningWrapper and perform training and evaluation
-        DLWrapper = DeepLearningWrapper(self.cfg, Data.X_traindev.shape[1])
-        DLWrapper.Trainer(Data.train_loader, Data.test_loader)
-        DLWrapper.Evaluator(Data.test_loader)
-
+        DLWrapper = DeepLearningWrapper(self.cfg, Data.seed_splits[0]['X_traindev'].shape[1])
+        DLWrapper.Evaluator(Data.seed_splits)
+        
         # Compute SHAP values, select novel predictor features
         Selector = SHAPSelector(
             self.cfg,
             Data.master_features,
             self.base, 
-            DLWrapper.model, 
-            Data.X_traindev,
-            Data.X_test, 
-            Data.X_train_tensor,
-            Data.X_test_tensor
+            DLWrapper.model,
+            DLWrapper.X_traindev,
+            DLWrapper.X_test,
+            DLWrapper.X_train_tensor,
+            DLWrapper.X_test_tensor,
         )
         Selector.SHAP_FeatureFilter()
         Selector.plot_SHAPma()

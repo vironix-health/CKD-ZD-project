@@ -22,23 +22,7 @@ class DataHandler:
         self.master_features = None
         self.base = base
         self.augment = None
-        
-        # Initialize data splits
-        self.X_traindev = None
-        self.y_traindev = None
-        self.X_test = None
-        self.y_test = None
-        self.val_sets = None
-
-        # Initialize tensors and DataLoader
-        self.X_train_tensor = None
-        self.X_test_tensor = None
-        self.y_train_tensor = None
-        self.y_test_tensor = None
-        self.train_dataset = None
-        self.test_dataset = None
-        self.train_loader = None
-        self.test_loader = None
+        self.seed_splits = []
 
         # Initialize the scaler
         self.scaler = StandardScaler()
@@ -81,16 +65,30 @@ class DataHandler:
 
         # Set response variable 
         y = self.master[self.cfg['response']]
-        
-        np.random.seed(self.cfg['random_state'])  # Ensure reproducibility
 
         if self.scale_flag:
             X = self.scaler.fit_transform(X)  # Scale the features
             
-        # Split data into test and the remaining data
-        self.X_traindev, self.X_test, self.y_traindev, self.y_test = train_test_split(
-            X, y, test_size=self.cfg['test_size'], random_state=self.cfg['random_state']
-        )
+        for seed in self.cfg['seeds']:
+            X_traindev, X_test, y_traindev, y_test = train_test_split(
+                X, y, test_size=self.cfg['test_size'], random_state=seed
+            )
+
+            self.seed_splits.append({
+                'X_traindev': X_traindev,
+                'X_test': X_test,
+                'y_traindev': y_traindev,
+                'y_test': y_test,
+                'val_sets': [],
+                "X_train_tensor": None,
+                "X_test_tensor": None,
+                "y_train_tensor": None,
+                "y_test_tensor": None,
+                "train_dataset": None,
+                "test_dataset": None,
+                "train_loader": None,
+                "test_loader": None
+            })
         
     def split_ValSets(self):
         """
@@ -99,22 +97,20 @@ class DataHandler:
         # Split data into test and the remaining data
         self.split_Vanilla()
 
-        # Further split the remaining data into multiple train and validation sets
-        val_sets = []
-        for _ in range(self.cfg['n_valsets']):
-            # Randomly select validation set from the remaining data
-            X_train, X_val, y_train, y_val = train_test_split(
-                self.X_traindev, self.y_traindev, test_size=self.cfg['val_size'], random_state=np.random.randint(10000)
-            )
-            
-            val_sets.append({
-                'X_train': X_train, 
-                'y_train': y_train, 
-                'X_val': X_val, 
-                'y_val': y_val
-            })
-
-        self.val_sets = val_sets
+        for seed_split in self.seed_splits:
+            # Further split the remaining data into multiple train and validation sets
+            for _ in range(self.cfg['n_valsets']):
+                # Randomly select validation set from the remaining data
+                X_train, X_val, y_train, y_val = train_test_split(
+                    seed_split['X_traindev'], seed_split['y_traindev'], test_size=self.cfg['val_size'], random_state=np.random.randint(10000)
+                )
+                
+                seed_split['val_sets'].append({
+                    'X_train': X_train, 
+                    'y_train': y_train, 
+                    'X_val': X_val, 
+                    'y_val': y_val
+                })
 
     # ------------------------------------------------      TENSOR WORKFLOW      ------------------------------------------------ #
 
@@ -122,22 +118,24 @@ class DataHandler:
         """
         Convert data to PyTorch tensors and create DataLoader for batch processing.
         """
-        # Convert data to PyTorch tensors
-        self.X_train_tensor = torch.tensor(self.X_traindev, dtype=torch.float32)
-        self.X_test_tensor = torch.tensor(self.X_test, dtype=torch.float32)
-        self.y_train_tensor = torch.tensor(self.y_traindev.values, dtype=torch.float32).view(-1, 1)
-        self.y_test_tensor = torch.tensor(self.y_test.values, dtype=torch.float32).view(-1, 1)
 
-        # Ensure no NaN values in tensors
-        assert not self.X_train_tensor.isnan().any(), "NaN values found in X_train_tensor"
-        assert not self.y_train_tensor.isnan().any(), "NaN values found in y_train_tensor"
+        for seed_split in self.seed_splits:
+            # Convert data to PyTorch tensors
+            seed_split['X_train_tensor'] = torch.tensor(seed_split['X_traindev'], dtype=torch.float32)
+            seed_split['X_test_tensor'] = torch.tensor(seed_split['X_test'], dtype=torch.float32)
+            seed_split['y_train_tensor'] = torch.tensor(seed_split['y_traindev'].values, dtype=torch.float32).view(-1, 1)
+            seed_split['y_test_tensor'] = torch.tensor(seed_split['y_test'].values, dtype=torch.float32).view(-1, 1)
 
-        # Create DataLoader for batch processing
-        self.train_dataset = TensorDataset(self.X_train_tensor, self.y_train_tensor)
-        self.test_dataset = TensorDataset(self.X_test_tensor, self.y_test_tensor)
+            # Ensure no NaN values in tensors
+            assert not seed_split['X_train_tensor'].isnan().any(), "NaN values found in X_train_tensor"
+            assert not seed_split['y_train_tensor'].isnan().any(), "NaN values found in y_train_tensor"
 
-        self.train_loader = DataLoader(self.train_dataset, batch_size=64, shuffle=True)
-        self.test_loader = DataLoader(self.test_dataset, batch_size=64, shuffle=False)
+            # Create DataLoader for batch processing
+            seed_split['train_dataset'] = TensorDataset(seed_split['X_train_tensor'], seed_split['y_train_tensor'])
+            seed_split['test_dataset'] = TensorDataset(seed_split['X_test_tensor'], seed_split['y_test_tensor'])
+
+            seed_split['train_loader'] = DataLoader(seed_split['train_dataset'], batch_size=64, shuffle=True)
+            seed_split['test_loader'] = DataLoader(seed_split['test_dataset'], batch_size=64, shuffle=False)
 
     # ------------------------------------------------      DATA AUGMENTATION      ------------------------------------------------ #
 

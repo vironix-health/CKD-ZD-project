@@ -46,7 +46,7 @@ class CoxPHWrapper:
         cph_CrossVal = CoxPHFitter(penalizer=self.cfg['penalizer'])
         
         # Define the number of folds
-        kf = KFold(n_splits=self.cfg['n_folds'], shuffle=True, random_state=self.cfg['random_state'])
+        kf = KFold(n_splits=self.cfg['n_folds'], shuffle=True, random_state=self.cfg['seeds'][0])
         
         # Perform manual cross-validation
         for train_index, test_index in kf.split(self.base_augment):

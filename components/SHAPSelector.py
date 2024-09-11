@@ -126,6 +126,12 @@ class SHAPSelector:
 
         NovelFeatures = sorted_feature_names[:self.cfg['n_novel']]
         vals = sorted_shap_values[:self.cfg['n_novel']]
+
+        # Remove features with mean abs SHAP values of 0
+        non_zero_indices = vals != 0
+        NovelFeatures = NovelFeatures[non_zero_indices]
+        vals = vals[non_zero_indices]
+
         with open(f"novel_predictors/{self.cfg['tag']}_Features.pkl", 'wb') as f:
             pickle.dump(list(NovelFeatures), f)
         self.NovelFeatures = (NovelFeatures, vals)
@@ -201,7 +207,7 @@ class SHAPSelector:
             X_test_top_40,  
             feature_names=top_40_feature_names_sorted, 
             plot_size=(10, 12), 
-            max_display=40,  
+            max_display=len(top_40_feature_names_sorted),  
             show=False  
         )
 

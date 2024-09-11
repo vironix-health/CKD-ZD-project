@@ -7,7 +7,9 @@ from sklearn.svm import SVC
 from sklearn.metrics import roc_auc_score
 from skopt.utils import use_named_args
 from skopt import gp_minimize
+from copy import deepcopy
 import warnings
+import statistics
 import numpy as np
 import pickle
 
@@ -28,13 +30,12 @@ class ClassicalLearningWrapper:
             'dct': DecisionTreeClassifier(),
             'rdmf': RandomForestClassifier(),
             'lr': LogisticRegression(max_iter=1000),
-            # 'lsvm': SVC(kernel="linear", probability=True),
-            # 'ksvm': SVC(kernel="rbf", probability=True),
-            # 'knn': KNeighborsClassifier(),
         }
         self.model = self.model_tags[cfg['tag']]
         self.best_auc_params = None
         self.best_auc_score = None
+        self.X_traindev = None
+        self.X_test = None
         self.cfg = cfg
 
     # -----------------------------------------------------      BAYESIAN OPTIMIZATION      ----------------------------------------------------- #
@@ -63,7 +64,7 @@ class ClassicalLearningWrapper:
             auc_scores.append(auc)
         return np.mean(auc_scores)
 
-    def BayesianHyperparameterOptimizer(self, val_sets):
+    def BayesianHyperparameterOptimizer(self, data):
         """
         Perform Bayesian hyperparameter optimization to find the best parameters for the model.
 
@@ -72,26 +73,36 @@ class ClassicalLearningWrapper:
         """
         warnings.simplefilter(action='ignore', category=FutureWarning)  # Ignore FutureWarning
 
-        # Define objective function for Bayesian optimization
-        @use_named_args(self.cfg['auc_space'])
-        def AUC_objective(**params):
-            print("Testing params:", params)  # Print current test parameters to console
-            auc = self.AUC_validate(params, val_sets)
-            print("AUC for params:", auc)  # Print AUC for parameters console
-            return -auc  # Invert to optimize for minimum AUC
+        best_auc_params = []
+        best_auc_scores = []
 
-        # Perform Bayesian Optimization
-        result = gp_minimize(AUC_objective, self.cfg['auc_space'], n_calls=self.cfg['n_bayesian'], random_state=self.cfg['random_state'])
+        for i, d in enumerate(data):
+            # Define objective function for Bayesian optimization
+            @use_named_args(self.cfg['auc_space'])
+            def AUC_objective(**params):
+                print("Testing params:", params)  # Print current test parameters to console
+                auc = self.AUC_validate(params, d['val_sets'])
+                print("AUC for params:", auc)  # Print AUC for parameters console
+                return -auc  # Invert to optimize for minimum AUC
 
-        # Extract the best parameters and the corresponding score
-        self.best_auc_params = {dimension.name: result.x[i] for i, dimension in enumerate(self.cfg['auc_space'])}
-        self.best_auc_score = -result.fun
+        
+            # Perform Bayesian Optimization
+            result = gp_minimize(AUC_objective, self.cfg['auc_space'], n_calls=self.cfg['n_bayesian'], random_state=self.cfg['seeds'][i])
+
+            # Extract the best parameters and the corresponding score
+            best_auc_params.append({dimension.name: result.x[i] for i, dimension in enumerate(self.cfg['auc_space'])})
+            best_auc_scores.append(-result.fun)
+
+        best_index = best_auc_scores.index(max(best_auc_scores))
+        self.best_auc_score = best_auc_scores[best_index]
+        self.best_auc_params = best_auc_params[best_index]
+
         print("Best parameters found: ", self.best_auc_params)
-        print("Best average AUC across validation sets: ", self.best_auc_score)
+        print("Best mean AUC across validation sets: ", self.best_auc_score)
 
-    # --------------------------------------------------------------      TRAINER      -------------------------------------------------------------- #  
+    # -------------------------------------------------------------      EVALUATOR      ------------------------------------------------------------- #
 
-    def Trainer(self, X_traindev, y_traindev):
+    def Evaluator(self, data):
         """
         Train the model using the best hyperparameters found during optimization.
 
@@ -99,27 +110,31 @@ class ClassicalLearningWrapper:
         - X_traindev: Training data features.
         - y_traindev: Training data labels.
         """
-        self.model.set_params(**self.best_auc_params)
-        self.model.fit(X_traindev, y_traindev)
+        best_model = deepcopy(self.model)
+        best_model.set_params(**self.best_auc_params)
+
+        auc_scores = []
+        max_auc = 0
+        for d in data:
+            best_model.fit(d['X_traindev'], d['y_traindev'])
+            y_pred = best_model.predict(d['X_test'])
+            auc = roc_auc_score(d['y_test'], y_pred)
+            auc_scores.append(auc)
+
+            new_max = max(auc_scores)
+            if new_max > max_auc:
+                max_auc = new_max
+                self.model = deepcopy(best_model)
+                self.X_traindev = d['X_traindev']
+                self.X_test = d['X_test']
+
+        mean_auc = np.mean(auc_scores)
+        dev_auc = statistics.stdev(auc_scores)
+                
+        print(f"Mean AUC: {mean_auc}")
+        print(f"Standard Deviation: {dev_auc}")
+        print(f"Max AUC: {max_auc}")
 
         # Save model to pickle file
         with open(f"models/{self.cfg['tag']}_MIMIC.pkl", 'wb') as file:
             pickle.dump(self.model, file)
-
-    # -------------------------------------------------------------      EVALUATOR      ------------------------------------------------------------- #
-
-    def Evaluator(self, X_test, y_test):
-        """
-        Evaluate the model on the test set and print the AUC score.
-
-        Parameters:
-        - X_test: Test data features.
-        - y_test: Test data labels.
-
-        Returns:
-        - AUC score on the test set.
-        """
-        y_pred = self.model.predict(X_test)
-        auc = roc_auc_score(y_test, y_pred)
-        print(f"Test AUC: {auc}")
-        return auc

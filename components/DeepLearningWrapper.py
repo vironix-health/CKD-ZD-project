@@ -159,7 +159,7 @@ class DeepLearningWrapper:
 
     def _evaluator(self, test_loader, best_model):
         """
-        Evaluate the model on the test set and print the AUC score.
+        Evaluate the model on the test set and return the AUC score.
 
         Parameters:
         - test_loader: DataLoader for the test data.
@@ -188,8 +188,7 @@ class DeepLearningWrapper:
         Train the model using the provided training and validation data loaders.
 
         Parameters:
-        - train_loader: DataLoader for the training data.
-        - val_loader: DataLoader for the validation data.
+        - data: List of dictionaries containing 'train_loader', 'test_loader', 'X_traindev', 'X_test', 'X_train_tensor', and 'X_test_tensor'.
         """
         auc_scores = []
         max_auc = 0

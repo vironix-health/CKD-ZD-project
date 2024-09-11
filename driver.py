@@ -24,9 +24,9 @@ class Driver:
 
     def VanillaPipe(self):
         """
-        Execute the vanilla pipeline which includes only CoxPH evaluation with base dataset.
+        Execute the vanilla pipeline which includes only CoxPH evaluation with the base dataset.
         """
-        CoxPH = CoxPHWrapper(self.cfg, self.base) # Initialize CoxPHWrapper with base dataset
+        CoxPH = CoxPHWrapper(self.cfg, self.base) # Initialize CoxPHWrapper with the base dataset
         CoxPH.Summary()
         CoxPH.FeatureRank()
         CoxPH.SchoenfeldTest()
@@ -51,7 +51,7 @@ class Driver:
         CLWrapper.BayesianHyperparameterOptimizer(Data.seed_splits)
         CLWrapper.Evaluator(Data.seed_splits)
 
-        # Compute SHAP values, select novel predictor features
+        # Compute SHAP values and select novel predictor features
         Selector = SHAPSelector(
             self.cfg,
             Data.master_features,
@@ -64,10 +64,10 @@ class Driver:
         Selector.plot_SHAPma()
         Selector.plot_ClassicalSHAPbeeswarm()
         
-        # Augment base dataset with novel predictor features
+        # Augment the base dataset with novel predictor features
         Data.baseAugmentation(Selector.get_NovelFeatures())
         
-        # Initialize CoxPHWrapper and evaluate on augmented dataset
+        # Initialize CoxPHWrapper and evaluate on the augmented dataset
         CoxPH = CoxPHWrapper(self.cfg, Data.augment)
         CoxPH.Summary()
         CoxPH.FeatureRank()
@@ -93,7 +93,7 @@ class Driver:
         DLWrapper = DeepLearningWrapper(self.cfg, Data.seed_splits[0]['X_traindev'].shape[1])
         DLWrapper.Evaluator(Data.seed_splits)
         
-        # Compute SHAP values, select novel predictor features
+        # Compute SHAP values and select novel predictor features
         Selector = SHAPSelector(
             self.cfg,
             Data.master_features,
@@ -108,10 +108,10 @@ class Driver:
         Selector.plot_SHAPma()
         Selector.plot_DeepSHAPbeeswarm()
         
-        # Augment base dataset with novel predictor features
+        # Augment the base dataset with novel predictor features
         Data.baseAugmentation(Selector.get_NovelFeatures())
         
-        # Initialize CoxPHWrapper and evaluate on augmented dataset
+        # Initialize CoxPHWrapper and evaluate on the augmented dataset
         CoxPH = CoxPHWrapper(self.cfg, Data.augment)
         CoxPH.Summary()
         CoxPH.FeatureRank()

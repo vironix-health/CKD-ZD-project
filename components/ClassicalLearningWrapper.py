@@ -69,7 +69,7 @@ class ClassicalLearningWrapper:
         Perform Bayesian hyperparameter optimization to find the best parameters for the model.
 
         Parameters:
-        - val_sets: List of validation sets, each containing 'X_train', 'y_train', 'X_val', and 'y_val'.
+        - data: List of datasets, each containing 'val_sets' which include 'X_train', 'y_train', 'X_val', and 'y_val'.
         """
         warnings.simplefilter(action='ignore', category=FutureWarning)  # Ignore FutureWarning
 
@@ -104,11 +104,10 @@ class ClassicalLearningWrapper:
 
     def Evaluator(self, data):
         """
-        Train the model using the best hyperparameters found during optimization.
+        Train the model using the best hyperparameters found during optimization and evaluate it.
 
         Parameters:
-        - X_traindev: Training data features.
-        - y_traindev: Training data labels.
+        - data: List of datasets, each containing 'X_traindev', 'y_traindev', 'X_test', and 'y_test'.
         """
         best_model = deepcopy(self.model)
         best_model.set_params(**self.best_auc_params)

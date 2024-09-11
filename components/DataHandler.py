@@ -146,7 +146,7 @@ class DataHandler:
         Parameters:
         - novel_features: List of novel features to augment.
         """
-        # Select these columns from df_source
+        # Select these columns from the master dataset
         novel_features = ['subject_id'] + novel_features.tolist()
         df_novel = self.master[novel_features]
 
